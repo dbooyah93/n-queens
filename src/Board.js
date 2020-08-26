@@ -111,7 +111,7 @@
      *
      *
      * rook1 = {
-     *    let colm: parent[0]
+     *    var colm: parent[0]
      *    let row: parent[0][0]
      * }
      * if( check === 1 )
@@ -127,6 +127,11 @@
      * v
      */
     hasRowConflictAt: function(rowIndex) {
+      var keys = Object.keys(this.attributes);
+      console.log(keys);
+      console.log(this.attributes[0]);
+
+
       var count = 0;
       for ( var i = 0; i < this.attributes[rowIndex].length; i++ ) {
         var curEle = this.attributes[rowIndex][i];
@@ -137,13 +142,26 @@
           return true;
         }
       }
-
       return false;
     },
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
-      return false; // fixme
+      var keys = Object.keys(this.attributes);
+      for ( let j = 0; j < keys.length - 1; j++ ) {
+        var count = 0;
+        var row = this.attributes[j];
+        for ( var k = 0; k < row.length; k++ ) {
+          if ( row[k] === 1 ) {
+            count++;
+          }
+        }
+        if ( count > 1 ) {
+          return true;
+        }
+      }
+      return false;
+
     },
 
 
@@ -153,6 +171,9 @@
     //
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
+      // Iterate over this.attributes[rowIndex] and collect index of each 1 in an object?
+      // If key already exists, return false
+      // Else return true;
       return false; // fixme
     },
 
