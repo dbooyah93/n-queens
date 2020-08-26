@@ -61,13 +61,29 @@
       );
     },
 
+    // CHESS BOARD
+    /** N = 4
+     * [[1,0,0,0], [0,0,0,0],[0,0,0,0], [0,0,0,0]]
+     *
+     * makeEmptyMatrix may be the intial board
+     *
+     */
 
-/*
+    /**
+     * Main objective:
+     * Allow a user to create a chess board
+     * The chess board should contain values
+     *    rows and coloums
+     * Create a bunch of trees
+     * Then check trees
+     *
+     */
+    /*
          _             _     _
      ___| |_ __ _ _ __| |_  | |__   ___ _ __ ___ _
-    / __| __/ _` | '__| __| | '_ \ / _ \ '__/ _ (_)
+    / __| __/ _` | '__| __| | '_ \ / _ \ '__/ _ \(_)
     \__ \ || (_| | |  | |_  | | | |  __/ | |  __/_
-    |___/\__\__,_|_|   \__| |_| |_|\___|_|  \___(_)
+    |___/\__\__,_|_|   \__| |_| |_|\___|_|  \___|(_)
 
  */
     /*=========================================================================
@@ -78,8 +94,51 @@
     // --------------------------------------------------------------
     //
     // test if a specific row on this board contains a conflict
+
+    // DOM selection for the queen: td.square.positive
+    // THIS FUNCTION IS RAN ON CLICK ALREADY  x NxN
+
+    // CHESS BOARD
+    /** N = 4
+     * [[1,0,0,0], [0,0,0,0],[0,0,0,0], [0,0,0,0]]
+     */
+    /**
+     * runs on Board
+     * itterates through parent array
+     * then itterates through each child array
+     *
+     * define a conflict
+     *
+     *
+     * rook1 = {
+     *    let colm: parent[0]
+     *    let row: parent[0][0]
+     * }
+     * if( check === 1 )
+     *
+     */
+
+    /**
+     * this === child === board that is created in the html
+     * this.attributes === {object} keys ===
+     *                      object === 0: [0,0,0,0] . . .
+     *                                 1: [0,0,0,0]
+     *                                 2: [0,0,0,0]
+     * v
+     */
     hasRowConflictAt: function(rowIndex) {
-      return false; // fixme
+      var count = 0;
+      for ( var i = 0; i < this.attributes[rowIndex].length; i++ ) {
+        var curEle = this.attributes[rowIndex][i];
+        if ( curEle === 1 ) {
+          count++;
+        }
+        if ( count > 1 ) {
+          return true;
+        }
+      }
+
+      return false;
     },
 
     // test if any rows on this board contain conflicts
