@@ -45,7 +45,7 @@
       return (
         this.hasRowConflictAt(rowIndex) ||
         this.hasColConflictAt(colIndex) ||
-        this.hasMajorDiagonalConflictAt(this._getFirstRowColumnIndexForMajorDiagonalOn(rowIndex, colIndex)) ||
+        this.hasMajorDiagonalConflictAt(rowIndex, colIndex/*this._getFirstRowColumnIndexForMajorDiagonalOn(rowIndex, colIndex)*/) ||
         this.hasMinorDiagonalConflictAt(this._getFirstRowColumnIndexForMinorDiagonalOn(rowIndex, colIndex))
       );
     },
@@ -209,8 +209,10 @@
     // --------------------------------------------------------------
     //
     // test if a specific major diagonal on this board contains a conflict
-    hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
-      // console.log(majorDiagonalColumnIndexAtFirstRow);
+    hasMajorDiagonalConflictAt: function( rowIndex, colIndex ) {
+      // console.log(majorDiagonalColumnIndexAtFirstRow);b m
+      console.log(rowIndex, colIndex);
+
       return false; // fixme
     },
 
