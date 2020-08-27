@@ -128,10 +128,6 @@
      */
     hasRowConflictAt: function(rowIndex) {
       var keys = Object.keys(this.attributes);
-      console.log(keys);
-      console.log(this.attributes[0]);
-
-
       var count = 0;
       for ( var i = 0; i < this.attributes[rowIndex].length; i++ ) {
         var curEle = this.attributes[rowIndex][i];
@@ -161,7 +157,6 @@
         }
       }
       return false;
-
     },
 
 
@@ -171,14 +166,37 @@
     //
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
-      // Iterate over this.attributes[rowIndex] and collect index of each 1 in an object?
-      // If key already exists, return false
-      // Else return true;
+      var count = 0;
+
+      var keys = Object.keys(this.attributes); // itterates over different arrays [0, 1, 2, 3, n]
+      for ( var i = 0; i < keys.length - 1; i++ ) {
+        var row = this.attributes[keys[i]];
+        if ( row[colIndex] === 1 ) {
+          count++;
+        }
+      }
+      if ( count > 1 ) {
+        return true;
+      }
       return false; // fixme
     },
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
+      var checkers = {};
+      for ( var key in this.attributes ) {
+        var row = this.attributes[key]; // [0,0,0,0]
+        for ( var j = 0; j < row.length; j++ ) {
+          if ( row[j] === 1 ) {
+            if ( checkers[j] ) {
+              return true;
+            } else {
+              checkers[j] = 1;
+            }
+          }
+        }
+      }
+
       return false; // fixme
     },
 
