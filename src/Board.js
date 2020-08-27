@@ -45,7 +45,7 @@
       return (
         this.hasRowConflictAt(rowIndex) ||
         this.hasColConflictAt(colIndex) ||
-        this.hasMajorDiagonalConflictAt(rowIndex, colIndex/*this._getFirstRowColumnIndexForMajorDiagonalOn(rowIndex, colIndex)*/) ||
+        this.hasMajorDiagonalConflictAt(this._getFirstRowColumnIndexForMajorDiagonalOn(rowIndex, colIndex)) ||
         this.hasMinorDiagonalConflictAt(this._getFirstRowColumnIndexForMinorDiagonalOn(rowIndex, colIndex))
       );
     },
@@ -127,7 +127,7 @@
      * v
      */
     hasRowConflictAt: function(rowIndex) {
-
+      //console.log(n);
 
       var keys = Object.keys(this.attributes);
       var count = 0;
@@ -170,6 +170,7 @@
     //
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
+
       var count = 0;
 
       var keys = Object.keys(this.attributes); // itterates over different arrays [0, 1, 2, 3, n]
@@ -209,9 +210,85 @@
     // --------------------------------------------------------------
     //
     // test if a specific major diagonal on this board contains a conflict
-    hasMajorDiagonalConflictAt: function( rowIndex, colIndex ) {
-      // console.log(majorDiagonalColumnIndexAtFirstRow);b m
-      console.log(rowIndex, colIndex);
+    hasMajorDiagonalConflictAt: function(look) {
+      let count = 0;
+      for ( let r = 0; r < this.attributes.n; r++ ) {
+        for ( let c = 0; c < this.attributes[r].length; c++ ) {
+          if ( this.attributes[r][c] === 1 ) {
+            if ( c - r === look ) {
+              count++;
+            }
+          }
+        }
+      }
+      if (count > 1) {
+        return true;
+      }
+      /** col - row
+       * for ( let r = 0; r < this.attributes.n; r++ ) {
+       *    for ( let c = 0; c < this.attributes.n; c++ ) {
+       *      if ( this.attributes[r][c] === 1 ) {
+       *      if ( c - r === majorDiagonalColumnIndexAtFirstRow ) {
+       *        return true;
+       *      }
+       *    }
+       *  }
+       * }
+      * this === child === board that is created in the html
+      * this.attributes === {object} keys ===
+      *                      object === 0: [0, 1, 2, 3] // 0
+      *                                 1: [-1, 0, 1, 2]
+      *                                 2: [-2, -1, 0, 1]
+      *                                 3: [-3, -2, -1, 0] // 3
+      *
+      *                      object === 0: [0,1,0,0] // 1
+      *                                 1: [0,0,0,0] //
+      *                                 2: [0,0,0,1] // 3
+      *                                 3: [0,0,0,0]
+      *
+      *                      object === 0: [0,0,0,0] . . .
+      *                                 1: [1,0,0,0]
+      *                                 2: [0,1,0,0]
+      *                                 3: [0,0,1,0]
+      */
+
+
+      /**
+       * if ( this.attributes.)
+       */
+      // for ( let r = 0; r < this.attributes.n; r++ ) {
+      //   if ( this.attributes[r].indexOf(1) >= 0 ) {
+      //     for ( let c = r + 1; c < this.attributes.n; c++ ) {
+      //       if ( this.attributes[c].indexOf(1) === this.attributes[r].indexOf(1) + c ) {
+      //         return true;
+      //       }
+      //     }
+      //   }
+      // }
+
+      // /**
+      //  * find where 1 starts
+      //  * decend one row
+      //  * start one colomn out
+      //  *
+      //  * if no
+      //  *
+      //  * decend another row
+      //  * start another colomn out
+      //  */
+
+      // for ( let i = 0; i < this.attributes.n; i++ ) {
+      //   if ( this.attributes[i][0] === 1 ) {
+      //     for ( let c = 1; c < this.attributes.n; c++ ) {
+      //       console.log( this.attributes );
+      //       console.log( this.attributes[i]);
+      //       console.log('' + i + c);
+      //       if ( this.attributes[i + c][i] === 1 ) {
+      //         return true;
+      //       }
+      //     }
+      //   }
+      // }
 
       return false; // fixme
     },
@@ -226,16 +303,35 @@
         5: 0
       };
 
+
+      /**
+       * indexes = 0 === 1
+       * n === 4
+       * checkers = {
+       *
+       * }
+       * for ( r = 0; r < n - 1; r++ ) {
+       *  for ( ) {}
+       *    seeker = this.attributes[r][c];
+       *    if ( seeker === 1 ) {
+       *      checker[r][c] === 1 || ++
+       *  }
+       * }
+       */
+
+
       let seeker = this.attributes;
-      if ( seeker[3][0] === 1 || seeker[3][1] ) {
+      if ( seeker[2][0] === 1 || seeker[3][1] === 1 ) {
         checkers[1]++;
       }
-      if ( seeker[2][0] === 1 || seeker[3][1] || seeker[3][2] ) {
+      if ( seeker[1][0] === 1 || seeker[2][1] === 1 || seeker[3][2] === 1 ) {
         checkers[2]++;
       }
+
       if ( seeker[0][0] === 1 || seeker[1][1] === 1 || seeker[2][2] === 1 || seeker[3][3] === 1 ) {
         checkers[3]++;
       }
+
       if ( seeker[0][1] === 1 || seeker[1][2] === 1 || seeker[2][3] === 1 ) {
         checkers[4]++;
       }
@@ -244,7 +340,7 @@
       }
 
       for ( var prop in checkers ) {
-        console.log(checkers[prop]);
+        //console.log(checkers[prop]);
         if ( checkers[prop] > 1 ) {
           return true;
         }
@@ -264,6 +360,20 @@
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
+      // Iterate over the last row from right to left and find index of 1
+      // for (var r = this.attributes.n - 1; r >= 0; r--) {
+      //   if ( this.attributes[r].indexOf(1) >= 0 ) {
+      //     let firstQueen = this.attributes[r].indexOf(1);
+      //     // Iterate again to find indexOf 1 for each of the following rows
+      //     for (var j = r - 1; j < this.attributes[j].length; j--) {
+      //       if ( this.attributes[j].indexOf(1) === firstQueen - j) {
+      //         return true;
+      //       }
+      //     }
+      //   }
+      // }
+      // Repeat process starting at second to last row
+
       return false; // fixme
     }
 
