@@ -29,7 +29,7 @@
       this.trigger('change');
     },
 
-    _getFirstRowColumnIndexForMajorDiagonalOn: function(rowIndex, colIndex) {
+    _getFirstRowColumnIndexForMajorDiagonalOn: function(rowIndex, colIndex) { // rowIndex === attributes.keys && colIndex === array index
       return colIndex - rowIndex;
     },
 
@@ -127,6 +127,8 @@
      * v
      */
     hasRowConflictAt: function(rowIndex) {
+
+
       var keys = Object.keys(this.attributes);
       var count = 0;
       for ( var i = 0; i < this.attributes[rowIndex].length; i++ ) {
@@ -143,6 +145,8 @@
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
+
+
       var keys = Object.keys(this.attributes);
       for ( let j = 0; j < keys.length - 1; j++ ) {
         var count = 0;
@@ -206,11 +210,43 @@
     //
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
+      // console.log(majorDiagonalColumnIndexAtFirstRow);
       return false; // fixme
     },
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
+      let checkers = {
+        1: 0,
+        2: 0,
+        3: 0,
+        4: 0,
+        5: 0
+      };
+
+      let seeker = this.attributes;
+      if ( seeker[3][0] === 1 || seeker[3][1] ) {
+        checkers[1]++;
+      }
+      if ( seeker[2][0] === 1 || seeker[3][1] || seeker[3][2] ) {
+        checkers[2]++;
+      }
+      if ( seeker[0][0] === 1 || seeker[1][1] === 1 || seeker[2][2] === 1 || seeker[3][3] === 1 ) {
+        checkers[3]++;
+      }
+      if ( seeker[0][1] === 1 || seeker[1][2] === 1 || seeker[2][3] === 1 ) {
+        checkers[4]++;
+      }
+      if ( seeker[0][2] === 1 || seeker[1][3] === 1 ) {
+        checkers[5]++;
+      }
+
+      for ( var prop in checkers ) {
+        console.log(checkers[prop]);
+        if ( checkers[prop] > 1 ) {
+          return true;
+        }
+      }
       return false; // fixme
     },
 
