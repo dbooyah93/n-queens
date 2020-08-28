@@ -51,12 +51,19 @@ window.findNRooksSolution = function(n) {
    */
   let recur = function( n, board ) {
 
-    for ( let r = board.attributes.n - n ) {
-      for ( let c = 0; c < board.attributes.n; c++ ) {
-        board.togglePeice( r, c ) {
-
+    for ( let r = this.attributes.n - n; r < this.attributes.n; r++ ) {
+      for ( let c = 0; c < this.attributes.n; c++ ) {
+        this.togglePiece( r, c );
+        // recur( n - 1, this );
+        if ( this.hasAnyRooksConflicts() ) {
+          this.togglePiece( r, c );
         }
       }
+      if ( !this.hasAnyRooksConflicts() && n === 1 ) {
+        console.log(this);
+        return this;
+      }
+      return recur( n - 1, board );
     }
     /**
      *for ( let r = board.attributes.n - n ){ // 1st n
@@ -73,15 +80,14 @@ window.findNRooksSolution = function(n) {
      *}
      */
 
-      // board.check()
-      // if (board.check()) {}
-
+    // board.check()
+    // if (board.check()) {}
   };
 
 
 
   console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
-  recur(board.attributes.n, board);
+  solution = recur(this.attributes.n, board);
   return solution;
 };
 
