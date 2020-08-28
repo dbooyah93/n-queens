@@ -17,8 +17,41 @@
 // USE HELPER FUNCTIONS IN Board.js TO FILL THESE FUNCTIONS
 
 window.findNRooksSolution = function(n) {
-  var solution = undefined; //fixme
+  var solution = []; //fixme
 
+
+  var board = new Board( {n: n} );
+
+  let recur = function( n, board ) {
+
+    for ( let r = board.attributes.n - n; r < board.attributes.n; r++ ) {
+      for ( let c = 0; c < board.attributes.n; c++ ) {
+        board.togglePiece( r, c );
+        // recur( n - 1, board );
+        if ( board.hasAnyRooksConflicts() ) {
+          board.togglePiece( r, c );
+        }
+      }
+      if ( !board.hasAnyRooksConflicts() && n === 1 ) {
+        return board;
+      }
+      return recur( n - 1, board );
+    }
+  };
+
+  debugger;
+  let wrk = recur(board.attributes.n, board);
+  for ( let i = 0; i < board.attributes.n; i++ ) {
+    let row = board.attributes[i];
+    solution.push(row);
+  }
+  console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
+  return solution;
+};
+
+// return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
+window.countNRooksSolutions = function(n) {
+  var solutionCount = undefined; //fixme
 
   var board = new Board( {n: n} );
   /** build a tree
@@ -48,60 +81,6 @@ window.findNRooksSolution = function(n) {
    *  solution = board;
    * }
    *
-   */
-  let recur = function( n, board ) {
-
-    for ( let r = this.attributes.n - n; r < this.attributes.n; r++ ) {
-      for ( let c = 0; c < this.attributes.n; c++ ) {
-        this.togglePiece( r, c );
-        // recur( n - 1, this );
-        if ( this.hasAnyRooksConflicts() ) {
-          this.togglePiece( r, c );
-        }
-      }
-      if ( !this.hasAnyRooksConflicts() && n === 1 ) {
-        console.log(this);
-        return this;
-      }
-      return recur( n - 1, board );
-    }
-    /**
-     *for ( let r = board.attributes.n - n ){ // 1st n
-     *  for( let c = 0; c < board.attributes.n; c++ ){
-     *    board.togglePeice( r, c )
-     *    if ( n === 1 ) {
-     *      if ( !board.hasAnyRooksConflicts() ) {
-     *        return board
-     *      }
-     *    } else {
-     *      return recur( n - 1, board );
-     *    }
-     *  }
-     *}
-     */
-
-    // board.check()
-    // if (board.check()) {}
-  };
-
-
-
-  console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
-  solution = recur(this.attributes.n, board);
-  return solution;
-};
-
-// return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
-window.countNRooksSolutions = function(n) {
-  var solutionCount = undefined; //fixme
-
-  var board = new Board( {n: n} );
-  /**
-   *
-   *
-   *
-   *
-   * output solutionCount
    */
 
   console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
